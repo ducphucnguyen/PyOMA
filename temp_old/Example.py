@@ -8,22 +8,27 @@ Created on Sun Jan 31 11:05:29 2021
 # EXAMPLE pyOMA
 # =============================================================================
 # Import modules
-import pyOMA as OMA
+import PyOMA as OMA
 import numpy as np
 import pandas as pd
 from scipy import signal
 import matplotlib.pyplot as plt
 
+
+import scipy.io
+mat = scipy.io.loadmat('Before.mat')
+
+
 # open the file with pandas and create a dataframe 
-data = pd.read_csv(r"C:\Path to the file\5DOF_100Hz_60min.txt", header=None, sep="\t", index_col=False) 
+data = pd.read_csv("data.txt", header=None, sep="\t", index_col=False) 
 data = np.array(data)
 
 # Sampling frequency
-fs = 100 # [Hz] Sampling Frequency
-q = 5 # Decimation factor
+fs = 833 # [Hz] Sampling Frequency
+q = 10 # Decimation factor
 
 # Detrend and decimate
-data = signal.detrend(dati, axis=0) # Rimozione trend
+data = signal.detrend(data, axis=0) # Rimozione trend
 data = signal.decimate(data,  q, ftype='fir', axis=0) # Decimazione segnale
 fs = fs/q # [Hz] Decimated sampling frequency
 
@@ -31,10 +36,10 @@ fs = fs/q # [Hz] Decimated sampling frequency
 FDD = FDDsvp(data,  fs)
 
 # Define list/array with the peaks identified from the plot
-FreQ = [0.89, 2.6, 4.07, 5.21, 5.92] # identified peaks
+FreQ = [4.165] # identified peaks
 
 # Extract the modal properties 
-Res_FDD = OMA.FDDmodEX(FreQ, FDD[1])
+Res_FDD = FDDmodEX(FreQ, FDD[1])
 Res_EFDD = EFDDmodEX(FreQ, FDD[1], method='EFDD')
 Res_FSDD = EFDDmodEX(FreQ, FDD[1], method='FSDD')
 
